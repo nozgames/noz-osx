@@ -8,48 +8,59 @@ using NoZ.Platform.OpenGL;
 using System.Diagnostics;
 using System;
 
-namespace NoZ.Platform.OSX {
-    internal class NozView : GLKView {
+namespace NoZ.Platform.OSX
+{
+    internal class NozView : GLKView
+    {
         private IOSGameWindow _window;
 
-        internal NozView(IOSGameWindow window, CoreGraphics.CGRect rect) : base(rect) {
+        internal NozView(IOSGameWindow window, CoreGraphics.CGRect rect) : base(rect)
+        {
             _window = window;
         }
 
-        public override void TouchesBegan(NSSet touches, UIEvent evt) {
+        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        {
             base.TouchesBegan(touches, evt);
             _window.OnTouchesBegan(touches);
         }
 
-        public override void TouchesMoved(NSSet touches, UIEvent evt) {
+        public override void TouchesMoved(NSSet touches, UIEvent evt)
+        {
             base.TouchesMoved(touches, evt);
             _window.OnTouchesMoved(touches);
         }
 
-        public override void TouchesEnded(NSSet touches, UIEvent evt) {
+        public override void TouchesEnded(NSSet touches, UIEvent evt)
+        {
             base.TouchesEnded(touches, evt);
             _window.OnTouchesEnded(touches);
         }
 
-        public override void TouchesCancelled(NSSet touches, UIEvent evt) {
+        public override void TouchesCancelled(NSSet touches, UIEvent evt)
+        {
             base.TouchesCancelled(touches, evt);
-            _window.OnTouchesCancelled (touches);
+            _window.OnTouchesCancelled(touches);
         }
 
         public override bool CanBecomeFirstResponder => true;
     }
 
-    public class NozNavigationController : UINavigationController {
-        public NozNavigationController() {
+    public class NozNavigationController : UINavigationController
+    {
+        public NozNavigationController()
+        {
             NavigationBarHidden = true;
         }
 
-        public override bool PrefersStatusBarHidden() {
+        public override bool PrefersStatusBarHidden()
+        {
             return true;
         }
     }
 
-    internal class IOSGameWindow : GameWindow {
+    internal class IOSGameWindow : GameWindow
+    {
         public EAGLContext GLContext {
             get; set;
         }
@@ -65,7 +76,8 @@ namespace NoZ.Platform.OSX {
         private NozView _view;
         private Vector2Int _displaySize;
 
-        public IOSGameWindow (AppDelegate appDelegate) {
+        public IOSGameWindow(AppDelegate appDelegate)
+        {
             _displaySize = new Vector2Int(
                 (int)UIScreen.MainScreen.NativeBounds.Size.Width,
                 (int)UIScreen.MainScreen.NativeBounds.Size.Height
@@ -103,7 +115,8 @@ namespace NoZ.Platform.OSX {
             GL.BindFrameBuffer(_frameBufferId);
             GL.FrameBufferRenderBuffer(_renderBufferId);
 
-            var link = CADisplayLink.Create(() => {
+            var link = CADisplayLink.Create(() =>
+            {
                 Game.Instance.Frame();
             });
             link.PreferredFramesPerSecond = 60;
@@ -111,7 +124,8 @@ namespace NoZ.Platform.OSX {
             link.AddToRunLoop(NSRunLoop.Main, NSRunLoopMode.Default);
         }
 
-        protected override void OnBeginFrame() {
+        protected override void OnBeginFrame()
+        {
             _stopwatch.Start();
             _stopwatch2.Restart();
 
@@ -119,14 +133,16 @@ namespace NoZ.Platform.OSX {
             GL.BindFrameBuffer(_frameBufferId);
         }
 
-        protected override void OnEndFrame() {
+        protected override void OnEndFrame()
+        {
             GL.BindRenderBuffer(_renderBufferId);
             GLContext.PresentRenderBuffer((uint)GL.Imports.GL_RENDERBUFFER);
 
 
             _stopwatch2.Stop();
 
-            if (_stopwatch.ElapsedMilliseconds > 1000) {
+            if (_stopwatch.ElapsedMilliseconds > 1000)
+            {
                 _stopwatch.Stop();
 
                 var lastFPS = (((double)frameCount) / (avgElapsed / 1000.0));
@@ -143,7 +159,9 @@ namespace NoZ.Platform.OSX {
                 minElapsed = 100000;
                 maxElapsed = 0;
                 avgElapsed = 0;
-            } else {
+            }
+            else
+            {
 
                 frameCount++;
                 minElapsed = Math.Min(minElapsed, _stopwatch2.Elapsed.TotalMilliseconds);
@@ -160,49 +178,60 @@ namespace NoZ.Platform.OSX {
         private double avgElapsed = 0;
 
 
-        protected override void Show() {
-            
+        protected override void Show()
+        {
+
         }
 
-        private Vector2 ViewToWindow (UITouch touch) {
+        private Vector2 ViewToWindow(UITouch touch)
+        {
             var point = touch.LocationInView(_view);
             var scale = UIScreen.MainScreen.Scale;
             return new Vector2((float)(point.X * scale), (float)(point.Y * scale));
         }
 
-        internal void OnTouchesBegan(NSSet touches) {
-            foreach (var touch in touches) {
+        internal void OnTouchesBegan(NSSet touches)
+        {
+            foreach (var touch in touches)
+            {
                 var uitouch = touch as UITouch;
                 if (null == uitouch) continue;
                 Raise(TouchBegan, (ulong)uitouch.Handle.ToInt64(), ViewToWindow(uitouch), (int)uitouch.TapCount);
             }
         }
 
-        internal void OnTouchesEnded (NSSet touches) {
-            foreach (var touch in touches) {
+        internal void OnTouchesEnded(NSSet touches)
+        {
+            foreach (var touch in touches)
+            {
                 var uitouch = touch as UITouch;
                 if (null == uitouch) continue;
                 Raise(TouchEnded, (ulong)uitouch.Handle.ToInt64(), ViewToWindow(uitouch), (int)uitouch.TapCount);
             }
         }
 
-        internal void OnTouchesCancelled (NSSet touches) {
-            foreach (var touch in touches) {
+        internal void OnTouchesCancelled(NSSet touches)
+        {
+            foreach (var touch in touches)
+            {
                 var uitouch = touch as UITouch;
                 if (null == uitouch) continue;
                 Raise(TouchCancelled, (ulong)uitouch.Handle.ToInt64(), ViewToWindow(uitouch), (int)uitouch.TapCount);
             }
         }
 
-        internal void OnTouchesMoved (NSSet touches) {
-            foreach (var touch in touches) {
+        internal void OnTouchesMoved(NSSet touches)
+        {
+            foreach (var touch in touches)
+            {
                 var uitouch = touch as UITouch;
                 if (null == uitouch) continue;
                 Raise(TouchMoved, (ulong)uitouch.Handle.ToInt64(), ViewToWindow(uitouch), (int)uitouch.TapCount);
             }
         }
 
-        protected override void SetCursor(Cursor cursor) {
+        protected override void SetCursor(Cursor cursor)
+        {
             // TODO: IOS doesnt have cursors so just ignore the call.
         }
     }

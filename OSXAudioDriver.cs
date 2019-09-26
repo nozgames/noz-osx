@@ -4,7 +4,7 @@ using Foundation;
 using UIKit;
 using AVFoundation;
 
-namespace NoZ.Platform.IOS {
+namespace NoZ.Platform.OSX {
     class IOSAudioDriver : IAudioDriver {
         private const int MaxPlayers = 2;
 

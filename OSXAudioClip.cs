@@ -3,7 +3,7 @@
 using AVFoundation;
 using System.Runtime.InteropServices;
 
-namespace NoZ.Platform.IOS {
+namespace NoZ.Platform.OSX {
     class IOSAudioClip : AudioClip {
         public AVAudioFormat Format { get; private set; }
 

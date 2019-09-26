@@ -1,4 +1,4 @@
-﻿namespace NoZ.Platform.IOS {
+﻿namespace NoZ.Platform.OSX {
     public class ProgramContext {
         public string[] Args { get; set; }
         public string Name { get; set; }

@@ -2,7 +2,7 @@
 using System.IO;
 using UIKit;
 
-namespace NoZ.Platform.IOS {
+namespace NoZ.Platform.OSX {
     public static class Program {
         internal static ProgramContext Context { get; set; }
 

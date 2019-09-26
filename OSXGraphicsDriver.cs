@@ -8,7 +8,7 @@ using UIKit;
 
 using NoZ.Platform.OpenGL;
 
-namespace NoZ.Platform.IOS {
+namespace NoZ.Platform.OSX {
     class IOSGraphicsDriver : OpenGLDriver {
         private static Cursor _fakeCursor = new Cursor();
 

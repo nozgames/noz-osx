@@ -8,7 +8,7 @@ using NoZ.Platform.OpenGL;
 using System.Diagnostics;
 using System;
 
-namespace NoZ.Platform.IOS {
+namespace NoZ.Platform.OSX {
     internal class NozView : GLKView {
         private IOSGameWindow _window;
 

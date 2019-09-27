@@ -1,2 +1,0 @@
-C:\Projects\Github\ActionTowerDefense\libs\noz-osx\obj\Release\noz-osx.csprojAssemblyReference.cache
-C:\Projects\Github\ActionTowerDefense\libs\noz-osx\obj\Release\noz-osx.csproj.CoreCompileInputs.cache
